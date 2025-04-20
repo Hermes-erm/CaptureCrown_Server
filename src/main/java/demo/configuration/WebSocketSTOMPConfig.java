@@ -8,7 +8,7 @@ import org.springframework.web.socket.config.annotation.WebSocketMessageBrokerCo
 
 @Configuration
 @EnableWebSocketMessageBroker
-public class WebConfig implements WebSocketMessageBrokerConfigurer {
+public class WebSocketSTOMPConfig implements WebSocketMessageBrokerConfigurer {
     @Override
     public void configureMessageBroker(MessageBrokerRegistry config) { // method which sets up an in-memory message broker... (for sending & receiving messages)
         config.enableSimpleBroker("/topic");
