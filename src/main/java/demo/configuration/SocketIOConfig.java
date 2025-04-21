@@ -24,12 +24,12 @@ public class SocketIOConfig {
         config.setHostname(socketHost);
         config.setPort(socketPort);
         this.socketIOServer = new SocketIOServer(config);
-        this.socketIOServer.start();
         return this.socketIOServer;
     }
 
     @PreDestroy
     public void stopServer() {
-        this.socketIOServer.stop();
+        if (this.socketIOServer != null) this.socketIOServer.stop();
+        log.warn("web-socket has been stopped");
     }
 }
