@@ -35,7 +35,7 @@ public class WebSocketComponent {
     public DataListener<PayLoad> onMessageReceived() {
         return (client, data, ackRequest) -> {
             log.info("Message received from clientId  {} => {}", client.getSessionId().toString().substring(33), this.objToJson(data));
-            this.server.getBroadcastOperations().sendEvent("receive_message", client, data);
+            this.server.getBroadcastOperations().sendEvent("receive_message", client, this.objToJson(data));
         };
     }
 
