@@ -23,19 +23,24 @@ public class WebSocketComponent {
 
     public ObjectMapper objectMapper;
 
+    public String receiveEvent = "current-pose";
+
+    public String sendEvent = "players-poses";
+
     public WebSocketComponent(SocketIOServer server) {
         this.server = server;
         this.server.start();
         this.objectMapper = new ObjectMapper();
         this.server.addConnectListener(client -> log.info("client {} connected", client.getSessionId().toString().substring(33)));
         this.server.addDisconnectListener(client -> log.info("client {} disconnected", client.getSessionId().toString().substring(33)));
-        this.server.addEventListener("sendMessage", PayLoad.class, onMessageReceived());
+        this.server.addEventListener(this.receiveEvent, PayLoad.class, onMessageReceived());
     }
 
     public DataListener<PayLoad> onMessageReceived() {
         return (client, data, ackRequest) -> {
-            log.info("Message received from clientId  {} => {}", client.getSessionId().toString().substring(33), this.objToJson(data));
-            this.server.getBroadcastOperations().sendEvent("receive_message", client, this.objToJson(data));
+            String payload = this.objToJson(data);
+//            log.info("Message received from clientId  {} => {}", client.getSessionId().toString().substring(33), this.objToJson(data));
+            this.server.getBroadcastOperations().sendEvent(this.sendEvent, client, payload);
         };
     }
 
