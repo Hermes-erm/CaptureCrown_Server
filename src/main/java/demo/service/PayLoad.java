@@ -2,13 +2,16 @@ package demo.service;
 
 import lombok.Data;
 
-enum RoomGenre {
-    BASE, MODERATE, EXCEPTION
+@Data
+class Pose { // public ig
+    private float x;
+    private float z;
+    private Object angle;
 }
 
 @Data
 public class PayLoad {
-    private int id;
     private String name;
-    private RoomGenre room;
+    private Pose pose;
+    private String color;
 }

@@ -23,9 +23,9 @@ public class WebSocketComponent {
 
     public ObjectMapper objectMapper;
 
-    public String receiveEvent = "current-pose";
+    public String receiveEvent = "publish-position";
 
-    public String sendEvent = "players-poses";
+    public String sendEvent = "players-pose";
 
     public WebSocketComponent(SocketIOServer server) {
         this.server = server;
@@ -39,7 +39,7 @@ public class WebSocketComponent {
     public DataListener<PayLoad> onMessageReceived() {
         return (client, data, ackRequest) -> {
             String payload = this.objToJson(data);
-//            log.info("Message received from clientId  {} => {}", client.getSessionId().toString().substring(33), this.objToJson(data));
+            log.info("Message received from {} => {}", client.getSessionId().toString().substring(33), this.objToJson(data));
             this.server.getBroadcastOperations().sendEvent(this.sendEvent, client, payload);
         };
     }
