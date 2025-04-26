@@ -5,6 +5,7 @@ import lombok.Data;
 @Data
 class Pose { // public ig
     private float x;
+    private float y;
     private float z;
     private Object angle;
 }
