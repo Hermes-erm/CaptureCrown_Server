@@ -60,11 +60,11 @@ public class WebSocketComponent {
 
     public DataListener<PayLoad> onNewPlayer(String eventName) {
         return (client, data, ackRequest) -> {
-            client.sendEvent(this.onLobby, this.players.values());
 //            String payload = this.objToJson(data);
             UUID playerId = client.getSessionId();
             String name = data.getName();
             log.info("new player arrived {}", name);
+            client.sendEvent(this.onLobby, this.players.values());
             this.players.put(playerId, data); // name
             this.server.getBroadcastOperations().sendEvent(eventName, client, data); // payload
         };
@@ -73,7 +73,7 @@ public class WebSocketComponent {
     public void playerDisconnected(SocketIOClient client) {
         UUID playerId = client.getSessionId();
         this.server.getBroadcastOperations().sendEvent(this.playerLeft, client, this.players.get(playerId));
+        log.info("client {} disconnected", this.players.get(playerId).getName()); // client.getSessionId().toString().substring(33)
         this.players.remove(playerId);
-        log.info("client {} disconnected", client.getSessionId().toString().substring(33));
     }
 }
