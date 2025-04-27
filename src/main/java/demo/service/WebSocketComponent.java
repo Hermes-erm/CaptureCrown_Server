@@ -34,6 +34,8 @@ public class WebSocketComponent {
 
     public String onLobby = "on-lobby";
 
+    public String onMessage = "message";
+
     private HashMap<UUID, PayLoad> players = new HashMap<>();
 
 //    @Autowired
@@ -45,11 +47,12 @@ public class WebSocketComponent {
         this.server = server;
         this.server.start();
         this.objectMapper = new ObjectMapper();
-//        this.server.addConnectListener(client -> log.info("client {} connected", client.getSessionId().toString().substring(33)));
+        this.server.addConnectListener(client -> log.info("client {} connected", client.getSessionId().toString().substring(33)));
         // this::playerDisconnected (method reference instead of playerDisconnected(client)), just a reference of method instead of directly invoking method in the ((func)->{}) parameter
         this.server.addDisconnectListener(this::playerDisconnected);
         this.server.addEventListener(this.poseEvent, PayLoad.class, onMessageReceived(this.poseEvent));
         this.server.addEventListener(this.newComer, PayLoad.class, onNewPlayer(this.newComer));
+        this.server.addEventListener(this.onMessage, Message.class, onChat(this.onMessage));
     }
 
     public String objToJson(Object obj) throws JsonProcessingException {
@@ -73,6 +76,13 @@ public class WebSocketComponent {
             client.sendEvent(this.onLobby, this.players.values());
             this.players.put(playerId, data); // name
             this.server.getBroadcastOperations().sendEvent(eventName, client, data); // payload
+        };
+    }
+
+    public DataListener<Message> onChat(String eventName) {
+        return (client, data, ackRequest) -> {
+//            log.info("message from client {}", data);
+            this.server.getBroadcastOperations().sendEvent(eventName, data);
         };
     }
 
