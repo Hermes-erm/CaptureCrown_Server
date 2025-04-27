@@ -23,6 +23,7 @@ public class SocketIOConfig {
         Configuration config = new Configuration();
         config.setHostname(socketHost);
         config.setPort(socketPort);
+        config.setOrigin("*");
         this.socketIOServer = new SocketIOServer(config);
         return this.socketIOServer;
     }
