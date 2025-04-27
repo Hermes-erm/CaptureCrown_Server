@@ -39,7 +39,7 @@ public class WebSocketComponent {
         this.server = server;
         this.server.start();
         this.objectMapper = new ObjectMapper();
-        this.server.addConnectListener(client -> log.info("client {} connected", client.getSessionId().toString().substring(33)));
+//        this.server.addConnectListener(client -> log.info("client {} connected", client.getSessionId().toString().substring(33)));
         // this::playerDisconnected (method reference instead of playerDisconnected(client)), just a reference of method instead of directly invoking method in the ((func)->{}) parameter
         this.server.addDisconnectListener(this::playerDisconnected);
         this.server.addEventListener(this.poseEvent, PayLoad.class, onMessageReceived(this.poseEvent));
