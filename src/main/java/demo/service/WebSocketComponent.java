@@ -5,6 +5,7 @@ import com.corundumstudio.socketio.listener.DataListener;
 import com.corundumstudio.socketio.protocol.Packet;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.gson.Gson;
 import demo.configuration.SocketIOConfig;
 import jakarta.annotation.PreDestroy;
 import lombok.extern.slf4j.Slf4j;
@@ -35,6 +36,11 @@ public class WebSocketComponent {
 
     private HashMap<UUID, PayLoad> players = new HashMap<>();
 
+//    @Autowired
+//    private Gson gson; // to serialize and de-serialize objects
+
+//    private Gson
+
     public WebSocketComponent(SocketIOServer server) {
         this.server = server;
         this.server.start();
@@ -52,9 +58,9 @@ public class WebSocketComponent {
 
     public DataListener<PayLoad> onMessageReceived(String eventName) {
         return (client, data, ackRequest) -> {
-            String payload = this.objToJson(data);
+//            String payload = this.objToJson(data);
             log.info("Message received from {} => {}", client.getSessionId().toString().substring(33), this.objToJson(data));
-            this.server.getBroadcastOperations().sendEvent(eventName, client, payload);
+            this.server.getBroadcastOperations().sendEvent(eventName, client, data);
         };
     }
 
@@ -73,7 +79,8 @@ public class WebSocketComponent {
     public void playerDisconnected(SocketIOClient client) {
         UUID playerId = client.getSessionId();
         this.server.getBroadcastOperations().sendEvent(this.playerLeft, client, this.players.get(playerId));
-        log.info("client {} disconnected", this.players.get(playerId).getName()); // client.getSessionId().toString().substring(33)
+        if (this.players.get(playerId) != null)
+            log.info("client {} disconnected", this.players.get(playerId).getName()); // client.getSessionId().toString().substring(33)
         this.players.remove(playerId);
     }
 }
