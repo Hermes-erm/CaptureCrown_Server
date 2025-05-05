@@ -1,0 +1,11 @@
+demo/controller/UserController.class
+demo/DemoApplication.class
+demo/configuration/SocketIOConfig.class
+demo/service/PayLoad.class
+demo/service/Pose.class
+demo/configuration/Config.class
+demo/controller/APIresponse.class
+demo/service/Message.class
+demo/service/WebSocketComponent.class
+demo/model/UserModel.class
+demo/model/UserRepo.class
